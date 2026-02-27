@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Visha Jain | Video Editor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="upload.css">
+  
+  <!-- 🔥 Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BBH+Bartle&family=BBH+Bogle&family=Bebas+Neue&family=Black+Ops+One&family=Dancing+Script:wght@400..700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Oswald:wght@200..700&family=Pacifico&family=Parisienne&display=swap" rel="stylesheet">
+  
+  <!-- 🔥 Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+  <!--- NAV section --->
+  <nav>
+    <h3>alexagency</h3>
+    <div class="menu-box">
+      <div class="menu-i menu-i1"></div>
+      <div class="menu-i menu-i2"></div>
+      <div class="menu-i menu-i3"></div>
+    </div>
+  </nav>
+  <!-- 🔥 HERO SECTION -->
+  <!-- about (your original) -->
+  <section id="about-page" class="page">
+    <h1>Upload your works</h1>
+    <div class="neon-card">
+      <form id="uploadForm" action="/upload" method="post">
+        <label for="YouTubeUrl">YouTube URL</label>
+        <input type="text" id="YouTubeUrl" name="YouTubeUrl" required>
+        
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required>
+        
+        <label for="description">Description</label>
+        <input type="text" id="description" name="description" required>
+        
+        <!-- Hidden field to store embed URL -->
+        <input type="hidden" id="embedUrl" name="embedUrl">
+        
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+  </section>
+  <!--- FOOTER --->
+  <footer class="footer">
+    <div class="f-top">
+      <h3>Vishal Jain</h3>
+      <p>Video Editor • Cinematic Storytelling • Motion Graphics</p>
+    </div>
+    
+    <div class="f-social">
+      <a href="https://www.instagram.com/vishaljan871" target="_blank"><i class="ri-instagram-line"></i></a>
+      <a href="https://youtube.com/@vishaljain_871" target="_blank"><i class="ri-youtube-line"></i></a>
+      <a href="https://wa.me/917307704170" target="_blank">
+        <i class="ri-whatsapp-line"></i>
+      </a>
+      <a href="mailto:alexagency888@gmail.com" target="_blank"><i class="ri-mail-line"></i></a>
+    </div>
+    
+    <div class="f-bottom">
+      <p>© 2026 Vishal Jain. All Rights Reserved.</p>
+    </div>
+  </footer>
+  <!--- SIDEBAR --->
+  <section class="sidebar">
+    <a href="/upload" class="active">Upload</a>
+    <a href="/about">About</a>
+    <a href="/skills">Skills</a>
+    <a href="/projects">Projects</a>
+    <a href="/services">Services</a>
+    <a href="/contact">Contact</a>
+    <img src="/images/lion.png" alt="image" />
+  </section>
+  <!-- 🔥 GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="about.js"></script>
+  
+  <!-- 🔥 Custom JavaScript for YouTube URL conversion -->
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Temporarily prevent form submission
+      
+      // Get the YouTube URL
+      const youtubeUrl = document.getElementById('YouTubeUrl').value;
+      
+      // Convert to embed URL
+      const embedUrl = convertToEmbedUrl(youtubeUrl);
+      
+      // Set the hidden field value
+      document.getElementById('embedUrl').value = embedUrl;
+      
+      // Optional: Show preview or alert
+      console.log('Original URL:', youtubeUrl);
+      console.log('Embed URL:', embedUrl);
+      
+      // Now submit the form
+      this.submit();
+    });
+    
+    function convertToEmbedUrl(url) {
+      // Handle different YouTube URL formats
+      let videoId = '';
+      
+      // Pattern for youtu.be URLs
+      if (url.includes('youtu.be')) {
+        videoId = url.split('youtu.be/')[1]?.split('?')[0]?.split('&')[0];
+      }
+      // Pattern for youtube.com watch URLs
+      else if (url.includes('youtube.com/watch')) {
+        const urlParams = new URLSearchParams(new URL(url).search);
+        videoId = urlParams.get('v');
+      }
+      // Pattern for youtube.com embed URLs (if someone already puts embed)
+      else if (url.includes('youtube.com/embed/')) {
+        videoId = url.split('youtube.com/embed/')[1]?.split('?')[0]?.split('&')[0];
+      }
+      // Pattern for shorts
+      else if (url.includes('youtube.com/shorts/')) {
+        videoId = url.split('youtube.com/shorts/')[1]?.split('?')[0]?.split('&')[0];
+      }
+      
+      if (videoId) {
+        // Remove any extra parameters
+        videoId = videoId.split('?')[0].split('&')[0];
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+      
+      // If no pattern matches, return original URL
+      return url;
+    }
+  </script>
+  
+</body>
+
+</html>
